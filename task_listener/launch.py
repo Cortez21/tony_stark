@@ -19,10 +19,10 @@ def main():
             if data_keeper.get_ticket_status(ticket_id) == 'closed':
                 time_passed = time_calculator.how_much_time_passed(data_keeper.get_ticket_timestamp(ticket_id))
                 data_keeper.update_ticket_status(ticket_id, 'open')
-                slack.send_message_to_me(message_formatter.create_for_exist(ticket_data, time_passed))
+                slack.send_message_to_support_channel(message_formatter.create_for_exist(ticket_data, time_passed))
         else:
             data_keeper.insert_ticket(ticket_id)
-            slack.send_message_to_me(message_formatter.create_for_new(ticket_data))
+            slack.send_message_to_support_channel(message_formatter.create_for_new(ticket_data))
     loaded_opened_tickets = data_keeper.get_opened_tickets()
     for opened_ticket_id in loaded_opened_tickets:
         if not check_if_exist(parsed_tickets_data, opened_ticket_id):

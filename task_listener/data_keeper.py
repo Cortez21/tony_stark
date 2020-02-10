@@ -3,6 +3,7 @@ import time
 
 _path_to_tickets_csv = 'task_listener/tickets.csv'
 
+
 def get_cookies(path):
     fo = open(path, 'r')
     data = fo.read()
