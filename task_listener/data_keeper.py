@@ -1,5 +1,6 @@
 import csv
 import time
+from task_listener.log_writer import write as write_log
 
 _path_to_tickets_csv = 'task_listener/tickets.csv'
 
@@ -58,6 +59,7 @@ def insert_ticket(ticket_id):
     tickets_data_dict = load_all()
     tickets_data_dict[ticket_id] = [ticket_id, 'open', int(time.time())]
     write_all(tickets_data_dict)
+    write_log('New ticket {} saved to local csv file'.format(ticket_id))
 
 
 def get_opened_tickets():
@@ -73,3 +75,4 @@ def update_ticket_status(ticket_id, ticket_status):
     loaded_tickets_data = load_all()
     loaded_tickets_data[ticket_id] = [ticket_id, ticket_status, int(time.time())]
     write_all(loaded_tickets_data)
+    write_log('The status of {} changed to {}'.format(ticket_id, ticket_status))

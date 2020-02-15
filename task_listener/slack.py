@@ -1,7 +1,9 @@
 import requests
+from task_listener.log_writer import write as write_log
 
 
 def send_message_to_me(message):
+    write_log('Sending message to me')
     headers = {
         'Content-type': 'application/json'
     }
@@ -12,6 +14,7 @@ def send_message_to_me(message):
 
 
 def send_message_to_support_channel(message):
+    write_log('Sending message to support channel')
     headers = {
         'Content-type': 'application/json'
     }

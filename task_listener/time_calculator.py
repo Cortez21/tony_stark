@@ -1,7 +1,9 @@
 import time
+from task_listener.log_writer import write as write_log
 
 
 def how_much_time_passed(timestamp):
+    write_log('Starting calculating how much time passed...')
     time_passed = {}
     timestamp_difference = int(time.time()) - int(timestamp)
     days = timestamp_difference // 86400
@@ -19,4 +21,5 @@ def how_much_time_passed(timestamp):
         time_passed['seconds'] = seconds
     else:
         time_passed['seconds'] = seconds
+    write_log('Time calculating is done. Result is {}'.format(time_passed))
     return time_passed
