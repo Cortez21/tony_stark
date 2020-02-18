@@ -80,6 +80,6 @@ def update_ticket_status(ticket_id, ticket_status):
 
 
 def get_webhook_token():
-    fo = open('config.json', 'r')
+    fo = open('task_listener/config.json', 'r')
     token = json.load(fo)['slack_webhook_token']
     return token
