@@ -23,12 +23,12 @@ def main():
                 write_log('Need to change reopened ticket status to "open"')
                 data_keeper.update_ticket_status(ticket_id, 'open')
                 write_log('Need to notify the users about reopened ticket ')
-                slack.send_message_to_me(message_formatter.create_for_exist(ticket_data, time_passed))
+                slack.send_message(message_formatter.create_for_exist(ticket_data, time_passed))
         else:
             write_log('New ticket {} detected. Need to insert it to local data warehouse'.format(ticket_id))
             data_keeper.insert_ticket(ticket_id)
             write_log('Need to notify the users about new ticket')
-            slack.send_message_to_me(message_formatter.create_for_new(ticket_data))
+            slack.send_message(message_formatter.create_for_new(ticket_data))
     loaded_opened_tickets = data_keeper.get_opened_tickets()
     write_log('Checking for closed tickets...')
     for opened_ticket_id in loaded_opened_tickets:
