@@ -1,5 +1,6 @@
 import csv
 import time
+import json
 from task_listener.log_writer import write as write_log
 
 _path_to_tickets_csv = 'task_listener/tickets.csv'
@@ -76,3 +77,9 @@ def update_ticket_status(ticket_id, ticket_status):
     loaded_tickets_data[ticket_id] = [ticket_id, ticket_status, int(time.time())]
     write_all(loaded_tickets_data)
     write_log('The status of {} changed to {}'.format(ticket_id, ticket_status))
+
+
+def get_webhook_token():
+    fo = open('config.json', 'r')
+    token = json.load(fo)['slack_webhook_token']
+    return token

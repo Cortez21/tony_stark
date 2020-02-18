@@ -2,7 +2,7 @@
 /workspace.xml
 .idea
 __pycache__
-tickets.csv
+task_listener/tickets.csv
 cookies
 logs/
 nohup.out
