@@ -1,7 +1,13 @@
 import task_listener.launch
 from time import sleep
 
+from task_listener.log_writer import write
+
 while True:
-    task_listener.launch.main()
+    try:
+        task_listener.launch.main()
+    except Exception as exc:
+        write(exc.__dict__)
     print("Iteration turned...")
-    sleep(60)
+    write('*' * 45)
+    sleep(10)

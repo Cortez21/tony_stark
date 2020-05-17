@@ -2,7 +2,9 @@
 /workspace.xml
 .idea
 __pycache__
-task_listener/tickets.csv
-cookies
 logs/
 nohup.out
+tony_venv
+start_tony.sh
+__init__.py
+test.py
