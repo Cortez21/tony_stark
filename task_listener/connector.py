@@ -9,6 +9,7 @@ def get_inbox_data():
         'accept': 'application/json, text/javascript, */*; q=0.01',
         'cookie': f'{get_cookies()}'
     }
+    print('Connecting to ticket-system...')
     write_log('Connecting to ticket-system...')
     response = requests.get(url=url, headers=headers).text
     if response:
