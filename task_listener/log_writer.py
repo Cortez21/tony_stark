@@ -1,12 +1,12 @@
 import datetime
 
 
-def write(text):
+def write(text, is_new_line=True):
     if not check_if_exist():
         create_log_file()
     date = datetime.datetime.now()
     fo = open('task_listener/logs/{}.log'.format(date.date()), 'a')
-    fo.write('[{}]: {} \n'.format(date.time(), text))
+    fo.write('[{}]: {} {}'.format(date.time(), text, '\n' if is_new_line else ''))
 
 
 def create_log_file(date=datetime.date.fromisoformat('2020-01-01').today()):

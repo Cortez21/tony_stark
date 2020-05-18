@@ -11,7 +11,6 @@ def get_inbox_data():
     }
     write_log('Connecting to ticket-system...')
     response = requests.get(url=url, headers=headers).text
-    print(response)
     if response:
         write_log('Data from ticket-system received')
     return response

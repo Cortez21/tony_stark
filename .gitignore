@@ -8,3 +8,4 @@ tony_venv
 start_tony.sh
 __init__.py
 test.py
+task_listener/config.json

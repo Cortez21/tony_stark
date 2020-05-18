@@ -13,6 +13,7 @@ def check_if_ticket_exist(ticket_id):
 
 
 def get_ticket(ticket_id):
+    write_log(f'Getting {ticket_id} ticket from DB')
     with PSQLConnection('ticket_system_bot') as connection:
         cursor = connection.get_cursor()
         cursor.execute(f"SELECT * FROM ticket WHERE ticket_id = '{ticket_id}'")
@@ -21,6 +22,7 @@ def get_ticket(ticket_id):
 
 
 def insert_ticket(ticket):
+    write_log(f'Inserting {ticket.ticket_id} ticket into DB')
     assignee_obj = get_assignee(ticket.assignee_name)
     ticket.subject = ticket.subject.replace('\'', '"')
     with PSQLConnection('ticket_system_bot') as connection:

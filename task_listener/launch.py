@@ -28,6 +28,7 @@ def check_if_changed(source):
         insert_checksum(hashed_source)
         return True
     else:
+        write_log('Nothing changed in inbox')
         return False
 
 
@@ -47,15 +48,13 @@ def main():
                     update_ticket(opened_ticket)
                     for message_ts in get_message_ts_list(opened_ticket):
                         change_reaction(message_ts, get_reaction(opened_ticket.status))
-    else:
-        write_log('Nothing changed in inbox')
 
 
 def handle_incoming(tickets):
     for incoming_ticket in tickets:
         incoming_ticket_id = incoming_ticket.ticket_id
         if check_if_ticket_exist(incoming_ticket_id):
-            write_log(f'Ticket {incoming_ticket.ticket_id} already exist in DB. Loading current...' )
+            write_log(f'Ticket {incoming_ticket.ticket_id} already exist in DB. Loading current...')
             stored_ticket = get_ticket(incoming_ticket_id)
             if incoming_ticket.last_message.lower() != stored_ticket.last_message.lower() \
                     and incoming_ticket.last_message.lower() not in get_channel_names_list():
@@ -82,7 +81,7 @@ def initialize_notification(template_method, incoming_ticket, stored_ticket):
 
 
 def save_notification(incoming_ticket_id, response, initial):
-    if response.status_code == 200:
+    if response.status_code == 200 and response.json()['ok']:
         notification = Notification(
             {'id': None, 'ticket_id': get_ticket(incoming_ticket_id).id, 'initial': initial,
              'slack_ts': response.json()['ts'],
