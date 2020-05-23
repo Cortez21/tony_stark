@@ -3,6 +3,8 @@ from time import sleep
 
 from task_listener.log_writer import write
 
+print('Starting bot...')
+
 while True:
     try:
         task_listener.launch.main()

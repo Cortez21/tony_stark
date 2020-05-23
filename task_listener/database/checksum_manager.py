@@ -9,6 +9,7 @@ def insert_checksum(checksum_string):
 
 
 def get_last_checksum():
+    print('Trying to DB connect...')
     with PSQLConnection('ticket_system_bot') as connection:
         cursor = connection.get_cursor()
         cursor.execute(f"SELECT checksum FROM inbox_checksum ORDER BY date DESC LIMIT 1")

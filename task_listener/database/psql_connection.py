@@ -11,7 +11,8 @@ class PSQLConnection:
         host = credentials['host']
         user = credentials['user']
         password = credentials['password']
-        self.conn = psycopg2.connect(host=host, port=5432, database=db_name, user=user,
+        port = credentials['port']
+        self.conn = psycopg2.connect(host=host, port=port, database=db_name, user=user,
                                      password=password)
         self.cursor = self.conn.cursor()
 

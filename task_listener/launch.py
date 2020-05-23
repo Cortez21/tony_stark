@@ -23,12 +23,15 @@ def get_channel_names_list():
 def check_if_changed(source):
     write_log('Checking incoming hash sum')
     hashed_source = sha256(source.encode('utf-8')).hexdigest()
+    print(hashed_source)
     if hashed_source != get_last_checksum():
         print(f'Detected some changing in inbox data, save new checksum {hashed_source} in DB')
         insert_checksum(hashed_source)
         return True
     else:
-        write_log('Nothing changed in inbox')
+        message = 'Nothing changed in inbox'
+        print(message)
+        write_log(message)
         return False
 
 
