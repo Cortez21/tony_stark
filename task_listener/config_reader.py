@@ -24,11 +24,11 @@ def get_ts_cookies():
 
 
 def get_slack_token():
-    return read_config()['slack']['token']
+    return os.environ['SLACK_TOKEN']
 
 
 def get_slack_channel():
-    return os.environ['SLACK_TOKEN']
+    return os.environ['SLACK_CHANNEL']
 
 
 def get_department_icon(department):
