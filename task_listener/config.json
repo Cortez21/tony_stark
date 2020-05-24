@@ -1,9 +1,5 @@
 {
     "slack": {
-        "token": "",
-        "team": "",
-        "channel": "",
-        "bot_id": "",
         "department_icons": {
             "Falcon": ":eagle:",
             "Cashir": ":euro:"
@@ -14,14 +10,5 @@
             "pending": "stopwatch"
         },
         "if_absent_assignee_sent_to": "!channel"
-    },
-    "psql":{
-        "user": "",
-        "password": "",
-        "host": "",
-        "port": ""
-    },
-    "ticket_system": {
-        "cookies": ""
     }
 }
