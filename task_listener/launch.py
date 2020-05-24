@@ -53,8 +53,8 @@ def main():
                         change_reaction(message_ts, get_reaction(opened_ticket.status))
 
 
-def handle_incoming(tickets):
-    for incoming_ticket in tickets:
+def handle_incoming(incoming_tickets):
+    for incoming_ticket in incoming_tickets:
         incoming_ticket_id = incoming_ticket.ticket_id
         if check_if_ticket_exist(incoming_ticket_id):
             write_log(f'Ticket {incoming_ticket.ticket_id} already exist in DB. Loading current...')
