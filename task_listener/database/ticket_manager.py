@@ -13,11 +13,12 @@ def check_if_ticket_exist(ticket_id):
 
 
 def get_ticket(ticket_id):
-    write_log(f'Getting {ticket_id} ticket from DB')
+    write_log(f'Getting {ticket_id} ticket from DB...')
     with PSQLConnection('ticket_system_bot') as connection:
         cursor = connection.get_cursor()
         cursor.execute(f"SELECT * FROM ticket WHERE ticket_id = '{ticket_id}'")
         response = cursor.fetchall()
+        write_log(' done' if len(response) > 0 else ' nothing to get')
         return Ticket(response[0]) if len(response) > 0 else None
 
 

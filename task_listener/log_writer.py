@@ -6,7 +6,7 @@ def write(text, is_new_line=True):
         create_log_file()
     date = datetime.datetime.now()
     fo = open('task_listener/logs/{}.log'.format(date.date()), 'a')
-    fo.write('[{}]: {} {}'.format(date.time() if is_new_line else '', text, '\n' if is_new_line else ''))
+    fo.write('{}{}{}'.format('\n' if is_new_line else '', f"[{date.time()}]: " if is_new_line else '', text))
 
 
 def create_log_file(date=datetime.date.fromisoformat('2020-01-01').today()):

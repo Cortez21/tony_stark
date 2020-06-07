@@ -25,7 +25,9 @@ def check_if_changed(source):
     hashed_source = sha256(source.encode('utf-8')).hexdigest()
     print(hashed_source)
     if hashed_source != get_last_checksum():
-        print(f'Detected some changing in inbox data, save new checksum {hashed_source} in DB')
+        message = f'Detected some changing in inbox data, save new checksum {hashed_source} in DB'
+        write_log(message)
+        print(message)
         insert_checksum(hashed_source)
         return True
     else:
@@ -61,14 +63,13 @@ def handle_incoming(incoming_tickets):
             stored_ticket = get_ticket(incoming_ticket_id)
             if incoming_ticket.last_message.lower() != stored_ticket.last_message.lower():  # Checking if the ticket has new reply
                 write_log(
-                    f'Detected new answering by {incoming_ticket.last_message} in ticket {incoming_ticket.ticket_id}: ',
-                    is_new_line=False)
+                    f'Detected new answering by {incoming_ticket.last_message} in ticket {incoming_ticket.ticket_id}: ')
                 if incoming_ticket.last_message.lower() not in get_channel_names_list():  # Checking if the person who replied exist in assignee table
-                    write_log(f'{incoming_ticket.last_message} is absent in assignee table, need to send notification')
+                    write_log(f'{incoming_ticket.last_message} is absent in assignee table, need to send notification', is_new_line=False)
                     initialize_notification(get_answered, incoming_ticket, stored_ticket)
                 else:
                     write_log(
-                        f'{incoming_ticket.last_message} exist in assignee table, not needed to send notification')
+                        f'{incoming_ticket.last_message} exist in assignee table, not needed to send notification', is_new_line=False)
                 update_ticket(incoming_ticket)
             elif incoming_ticket.assignee_name.lower() != stored_ticket.assignee_name.lower():  # Checking if assignee was changed
                 write_log(
@@ -76,6 +77,7 @@ def handle_incoming(incoming_tickets):
                 update_assignee(incoming_ticket)
                 initialize_notification(get_reassigned, incoming_ticket, stored_ticket)
             elif incoming_ticket.status != stored_ticket.status:
+                write_log(f'Detected status changing for {incoming_ticket.ticket_id} from {stored_ticket.status} to {incoming_ticket.status}')
                 for message_ts in get_message_ts_list(stored_ticket):
                     remove_reaction(message_ts, get_reaction(stored_ticket.status))
                 update_ticket(incoming_ticket)

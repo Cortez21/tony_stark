@@ -7,6 +7,7 @@ from task_listener.database.notification_manager import get_initial as get_initi
 
 
 def get_initial(incoming_ticket, _):
+    write_log(f'Creating "incoming" template for {incoming_ticket.ticket_id}...')
     ticket = get_ticket(incoming_ticket.ticket_id)
     assignee = get_assignee(ticket.assignee_name)
     message_template = f"""
@@ -18,16 +19,19 @@ def get_initial(incoming_ticket, _):
     Department: {ticket.department} {get_icon(ticket.department)}
     Brand: *{ticket.brands}*
     """
+    write_log(' done', is_new_line=False)
     return message_template
 
 
 def get_answered(incoming_ticket, stored_ticket):
+    write_log(f'Creating "answered" template for {incoming_ticket.ticket_id}...')
     assignee = get_assignee(stored_ticket.assignee_name)
     message_template = f"""
         <{'@' + assignee.slack_id if assignee else get_default_assignee()}>
         {incoming_ticket.last_message} answered in ticket
         {get_initial_permalink(stored_ticket)}
         """
+    write_log(' done', is_new_line=False)
     return message_template
 
 
@@ -38,10 +42,12 @@ def get_initial_permalink(stored_ticket):
 
 
 def get_reassigned(incoming_ticket, stored_ticket):
+    write_log(f'Creating "reassigned" template for {incoming_ticket.ticket_id}...')
     assignee = get_assignee(incoming_ticket.assignee_name)
     message_template = f"""
             <{'@' + assignee.slack_id if assignee else get_default_assignee()}>
             Ticket reassigned to {incoming_ticket.assignee_name}
             {get_initial_permalink(stored_ticket)}
             """
+    write_log(' done', is_new_line=False)
     return message_template
