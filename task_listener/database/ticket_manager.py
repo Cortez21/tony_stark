@@ -18,7 +18,7 @@ def get_ticket(ticket_id):
         cursor = connection.get_cursor()
         cursor.execute(f"SELECT * FROM ticket WHERE ticket_id = '{ticket_id}'")
         response = cursor.fetchall()
-        write_log(' done' if len(response) > 0 else ' nothing to get')
+        write_log(' done' if len(response) > 0 else ' nothing to get', is_new_line=False)
         return Ticket(response[0]) if len(response) > 0 else None
 
 
@@ -59,7 +59,7 @@ def update_answered_ticket(ticket):
 
 
 def update_assignee(incoming_ticket):
-    write_log(f'Update assignee for ticket {incoming_ticket.ticket_id} in DB')
+    write_log(f'Update assignee for ticket {incoming_ticket.ticket_id} in DB: ')
     assignee = get_assignee(incoming_ticket.assignee_name)
     with PSQLConnection('ticket_system_bot') as connection:
         cursor = connection.get_cursor()
@@ -68,10 +68,11 @@ def update_assignee(incoming_ticket):
         assignee_id = {assignee.id if assignee else 'Null'}
         where ticket_id = '{incoming_ticket.ticket_id}'
         """)
+    write_log('done', is_new_line=False)
 
 
 def get_opened():
-    write_log('Loading opened ticket from DB')
+    write_log('Loading all opened ticket from DB...')
     with PSQLConnection('ticket_system_bot') as connection:
         cursor = connection.get_cursor()
         cursor.execute(f"SELECT * FROM ticket WHERE status = 'open'")
@@ -79,4 +80,5 @@ def get_opened():
         ticket_list = list()
         for ticket in response:
             ticket_list.append(Ticket(ticket))
+        write_log(f'found {len(ticket_list)} opened ticket in DB at the moment', is_new_line=False)
         return ticket_list
