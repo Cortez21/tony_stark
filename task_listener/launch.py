@@ -1,5 +1,5 @@
 from hashlib import sha256
-from pprint import pprint
+from os import system
 
 from task_listener import parser, connector
 from task_listener.config_reader import get_reaction
@@ -56,18 +56,25 @@ def main():
 def handle_incoming(incoming_tickets):
     for incoming_ticket in incoming_tickets:
         incoming_ticket_id = incoming_ticket.ticket_id
-        if check_if_ticket_exist(incoming_ticket_id):
+        if check_if_ticket_exist(incoming_ticket_id):  # Checking if the ticket already exist in DB
             write_log(f'Ticket {incoming_ticket.ticket_id} already exist in DB. Loading current...')
             stored_ticket = get_ticket(incoming_ticket_id)
-            if incoming_ticket.last_message.lower() != stored_ticket.last_message.lower() \
-                    and incoming_ticket.last_message.lower() not in get_channel_names_list():
+            if incoming_ticket.last_message.lower() != stored_ticket.last_message.lower():  # Checking if the ticket has new reply
+                write_log(
+                    f'Detected new answering by {incoming_ticket.last_message} in ticket {incoming_ticket.ticket_id}: ',
+                    is_new_line=False)
+                if incoming_ticket.last_message.lower() not in get_channel_names_list():  # Checking if the person who replied exist in assignee table
+                    write_log(f'{incoming_ticket.last_message} is absent in assignee table, need to send notification')
+                    initialize_notification(get_answered, incoming_ticket, stored_ticket)
+                else:
+                    write_log(
+                        f'{incoming_ticket.last_message} exist in assignee table, not needed to send notification')
                 update_ticket(incoming_ticket)
-                initialize_notification(get_answered, incoming_ticket, stored_ticket)
-            elif incoming_ticket.assignee_name.lower() != stored_ticket.assignee_name.lower():
+            elif incoming_ticket.assignee_name.lower() != stored_ticket.assignee_name.lower():  # Checking if assignee was changed
+                write_log(
+                    f'Detected changing assignee from {stored_ticket.assignee_name} to {incoming_ticket.assignee_name} in ticket {incoming_ticket.ticket_id}. Need to send notification about it')
                 update_assignee(incoming_ticket)
                 initialize_notification(get_reassigned, incoming_ticket, stored_ticket)
-            elif incoming_ticket.last_message.lower() != stored_ticket.last_message.lower():
-                update_ticket(incoming_ticket)
             elif incoming_ticket.status != stored_ticket.status:
                 for message_ts in get_message_ts_list(stored_ticket):
                     remove_reaction(message_ts, get_reaction(stored_ticket.status))
