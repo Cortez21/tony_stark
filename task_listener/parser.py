@@ -41,6 +41,8 @@ def get_status_and_last_message(url):
     internal_data = get_internal_ticket_data(url)
     status = splitting(source=internal_data, from_phrase='id="ticketStatus" value="', to_phrase='">')
     last_message = splitting(source=internal_data, from_phrase='Last message:</b></td>   <td>', to_phrase='</td></tr>')
+    if 'email-protection' in last_message:
+        last_message = 'Undefined'
     return status, last_message
 
 
